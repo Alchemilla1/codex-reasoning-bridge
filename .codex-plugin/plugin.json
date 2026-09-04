@@ -15,7 +15,7 @@
     "capabilities": [
       "Decision context collection",
       "Human-readable advisor request drafting",
-      "Local and selected SSH host routing"
+      "Return decisions to the originating execution task"
     ],
     "defaultPrompt": "Use $reasoning-bridge with the requested ChatGPT web reasoning level, then return the decision to the active execution task."
   }

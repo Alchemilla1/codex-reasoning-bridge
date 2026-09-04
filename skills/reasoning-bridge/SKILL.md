@@ -120,6 +120,10 @@ unrelated proprietary code. Inspect the final attachment set before upload and
 mention the attachments in the written request so the advisor knows how to use
 them.
 
+If the connected browser cannot upload files, do not claim that an attachment
+was sent. Keep the prepared bundle available, report the limitation, and ask the
+user to attach it manually or continue with `code_context = none`.
+
 Before submitting, remove credentials, private keys, cookies, signed URLs,
 personal identifiers, and unrelated private material while preserving the
 technical meaning.

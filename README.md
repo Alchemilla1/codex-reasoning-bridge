@@ -54,6 +54,7 @@ $reasoning-bridge
 | `bundle` | 生成并上传一个只包含相关代码的干净最小包 |
 
 只有明确选择 `files` 或 `bundle` 时才会上传代码。附件不会包含凭据、环境文件、个人信息、数据集、日志、缓存、构建产物、模型权重或无关代码。
+如果当前浏览器不支持文件上传，插件会停在上传前并保留已准备好的附件，等待你手动附加。
 
 ```text
 $reasoning-bridge
@@ -135,6 +136,7 @@ Control whether code is uploaded as context for the web advisor.
 | `bundle` | Build and upload a sanitized minimal package containing only relevant code |
 
 Code is uploaded only when `files` or `bundle` is explicitly selected. Attachments exclude credentials, environment files, personal information, datasets, logs, caches, build outputs, model weights, and unrelated code.
+If the connected browser cannot upload files, the bridge stops before upload and keeps the prepared attachment for you to add manually.
 
 ```text
 $reasoning-bridge
@@ -166,4 +168,5 @@ Add the new experiment results to the previous advisor conversation and decide w
 
 ## Installation
 
-Install this repository as a Codex plugin, or copy `skills/reasoning-bridge` to `~/.codex/skills/`.
+For local use, copy `skills/reasoning-bridge` to `~/.codex/skills/`. To use the
+full plugin package, install it from a configured Codex marketplace.
