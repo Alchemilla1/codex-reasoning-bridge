@@ -30,8 +30,6 @@ Codex 继续负责读代码、改代码、调试和验证；网页顾问负责�
 - 不指定：保留当前网页会话已经显示的档位；
 - 指定档位不可用：停止发送并报告，不自动降级。
 
-这个配置只属于网页顾问，不会改变 Codex 的思考设置。
-
 #### `preview`
 
 只生成请求，不联系网页顾问，也不改变执行任务。
@@ -85,8 +83,6 @@ The reasoning level used by the web chat. Available values depend on the current
 - `xhigh`: use the xhigh level in the web chat;
 - omitted: keep the level currently shown in that chat;
 - unavailable: stop and report it instead of silently downgrading.
-
-This option belongs to the web advisor and does not change Codex's reasoning settings.
 
 #### `preview`
 
