@@ -1,4 +1,6 @@
 interface:
   display_name: "Reasoning Bridge"
-  short_description: "Bridge remote work to a high-reasoning web chat"
-  default_prompt: "Use $reasoning-bridge with the requested ChatGPT web reasoning level, then return the decision to the active execution task."
+  short_description: "Ask a ChatGPT web advisor for a high-level decision"
+  default_prompt: "Use $reasoning-bridge to ask the ChatGPT web advisor for a researched direction, then return the answer to the active task."
+policy:
+  allow_implicit_invocation: false

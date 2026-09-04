@@ -1,6 +1,6 @@
 {
   "name": "reasoning-bridge",
-  "version": "0.1.0+codex.20260904162632",
+  "version": "0.1.0+codex.20260904173450",
   "description": "Bridge remote coding work to a selected ChatGPT web reasoning level.",
   "author": {
     "name": "Reasoning Bridge contributors"
