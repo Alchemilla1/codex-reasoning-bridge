@@ -1,6 +1,6 @@
 {
   "name": "reasoning-bridge",
-  "version": "0.1.0+codex.20260904183120",
+  "version": "0.1.0+codex.20260904184533",
   "description": "Run a one-time local ChatGPT web consultation for a remote Codex task.",
   "author": {
     "name": "Reasoning Bridge contributors"

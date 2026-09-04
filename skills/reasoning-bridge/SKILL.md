@@ -19,11 +19,13 @@ remote_thread_id: <remote-thread-id>
 请重新判断当前架构方向。使用 xhigh，必要时附上关键代码文件。
 ```
 
-A concrete explicit invocation authorizes one complete run: read the remote
-task, send one request to the selected ChatGPT web advisor, and return the
-answer to the same remote task. Do not ask for a second confirmation before the
-browser submission. File upload is authorized only when `code_context` is
-explicitly `files` or `bundle`.
+A concrete explicit invocation is the user's instruction to complete the whole
+run: read the remote task, send one request to the selected ChatGPT web advisor,
+and return the answer to the same remote task. Do not introduce a skill-level
+preview, approval gate, or "shall I send it?" question after preparing the
+briefing. Proceed directly to submission wherever the active product policy
+allows it. File upload is authorized only when `code_context` is explicitly
+`files` or `bundle`.
 
 Optional settings are `reasoning_level` (`instant`, `medium`, `high`, `xhigh`,
 or `pro`) and `code_context` (`none`, `files`, or `bundle`). They apply only
@@ -87,10 +89,16 @@ Never send a remote path directly to a browser file chooser.
 8. On the local machine, use the signed-in Chrome/Edge extension. Do not use
    the built-in `@Browser` for local file upload and do not open ChatGPT from
    the remote host. Submit the completed briefing exactly once.
-9. Save the stable ChatGPT `/c/<conversation-id>` URL and the complete response
-   verbatim to `response.md`. Write `execution-brief.md` with the recommended
-   direction, implementation boundaries, validation expectations, rejected
-   assumptions, and evidence that would justify reconsideration.
+9. Save the stable ChatGPT `/c/<conversation-id>` URL immediately. If the
+   response is still generating after a short foreground check, persist phase
+   `waiting`, keep the browser tab available, and create one temporary local
+   heartbeat that checks this exact conversation every 10 minutes. End the
+   current turn instead of repeatedly polling. The heartbeat must read only the
+   saved state and exact conversation until generation finishes; it must not
+   reread the remote thread or rebuild the briefing on every check. Stay silent
+   while the response is incomplete. When complete, save the response verbatim
+   to `response.md`, write `execution-brief.md`, continue with return routing,
+   then pause the heartbeat.
 10. Verify the original remote thread identity again. Use the local Codex app
     tool `send_message_to_thread` to send the complete response and execution
     brief to that remote task. This is the only return-routing action.
@@ -118,9 +126,11 @@ Use the local browser-control extension:
    2 Medium, 3 High, 4 xhigh, 5 Pro. Confirm the visible label after movement.
 6. Confirm the briefing, attachments, and reasoning label, then submit once.
 7. After submission, confirm the user message is visible and record the stable
-   `/c/<conversation-id>` URL. Wait until the stop button disappears and the
-   complete assistant response plus response actions are visible. Preserve the
-   response verbatim before return routing.
+   `/c/<conversation-id>` URL. Use a short foreground wait only for fast
+   responses. For a long-running Pro response, do not hold the Codex turn open
+   with repeated browser polling. Switch to the temporary 10-minute heartbeat
+   described above. Completion requires the stop button to be absent and the
+   complete assistant response plus response actions to be visible.
 
 ## State and recovery
 
@@ -150,7 +160,9 @@ and search for the exact request before deciding whether it was sent.
 
 The run is complete only after the full response and execution brief have been
 sent to the verified remote thread. A local answer without remote delivery is
-`returned`, not `delivered`.
+`returned`, not `delivered`. A waiting heartbeat is temporary run machinery,
+not a permanent coordinator or watcher, and must be paused after delivery or a
+terminal error.
 
 ## Boundaries
 
