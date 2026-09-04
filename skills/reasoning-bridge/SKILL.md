@@ -26,18 +26,50 @@ investigation. Do not use it for routine coding or ordinary debugging.
 
 ## Bridge task
 
-Keep advisor work in a separate local Codex task. Reuse the same bridge task for
-follow-ups to the same logical problem so its web conversation and original
-answers remain available.
+All browser work runs through one persistent local Codex task titled exactly:
 
-Run this coordinator at low reasoning effort. Name it:
+`Reasoning Bridge · Local Coordinator`
 
-`RB · <execution-environment> · <project> · <topic>`
+Run it at low reasoning effort and pin it. It owns the signed-in browser,
+session files, advisor conversations, and return routing. Separate logical
+problems by their session directories and ChatGPT conversation URLs rather than
+creating browser work inside remote execution tasks.
 
-Place it in a local group named `Reasoning Bridge` when grouping is available.
-Otherwise pin it and keep the `RB ·` prefix. Record the originating task ID,
-host ID, project, working directory, branch, and commit so the answer returns to
-the correct task even after a handoff.
+Use one coordinator for all requests. Serialize simultaneous browser submissions
+by `request_id`; do not create additional persistent coordinators merely to
+separate projects. A coordinator pool is justified only after real concurrent
+advisor waits make the single coordinator a demonstrated bottleneck.
+
+Before gathering context, determine whether the originating task is local or
+remote:
+
+- From a normal local task, use `list_threads` to find the exact coordinator
+  title with `hostId = local`. If it does not exist, create one projectless
+  local task at low reasoning effort with that exact title, pin it, and send the
+  request to it. This is the only automatic coordinator-creation path.
+- From a remote task, never open `chatgpt.com`, never use an in-app browser, and
+  never create a bridge task on the remote host. Use `list_threads` to find the
+  exact coordinator title with `hostId = local`, then use
+  `send_message_to_thread` to route the request there. If it is absent, stop
+  with the single actionable blocker that the local coordinator must first be
+  initialized from a local Codex task.
+- When already running inside the coordinator, execute the browser workflow
+  directly instead of routing the message again.
+
+The routed message must contain the full briefing text, not merely a path that
+exists on the remote host. Prepend a compact routing block for Codex containing:
+originating task ID and host ID, project, working directory, branch, commit,
+session ID, context revision, requested `reasoning_level`, `code_context`, and
+whether the origin is blocked waiting for the answer. This routing block is not
+part of the human request sent to ChatGPT.
+
+For remote attachments, the originating task builds the allowlisted bundle and
+includes its source host plus absolute remote path in the routing block. The
+local coordinator copies that exact artifact through the existing remote-host
+connection into its local session `attachments/` directory, inspects it, and
+uploads the local copy. Never pass a remote path directly to the browser file
+chooser. If no file-transfer route exists, block only the attachment step and
+preserve the prepared request.
 
 Keep recoverable bridge artifacts under `$CODEX_HOME/reasoning-bridge/sessions/`
 (on Windows, the configured Codex home directory), with one directory per
