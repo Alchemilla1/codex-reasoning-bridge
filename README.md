@@ -4,117 +4,132 @@
 
 ## 中文
 
-Reasoning Bridge 是一个给 Codex 使用的网页顾问桥接器。当一个开发问题需要查资料、比较方案，或者重新判断整体方向时，它把必要背景交给 ChatGPT 网页端，再把完整回答带回原来的 Codex 任务。
+Reasoning Bridge 让 Codex 把一个开发问题交给 ChatGPT 网页端调研或判断，再根据回答继续工作。
 
-Codex 继续负责读代码、改代码、调试和验证；网页顾问负责需要更大范围信息或判断的问题。发送给网页顾问的内容会写成一段正常的工程说明，包含背景、证据、已经尝试过的办法和需要回答的问题。
+它适合用在架构选择、方案比较、外部调研、长期规划，以及普通调试无法解释的困难问题。发送给 ChatGPT 的内容会包含项目背景、现有证据、已经尝试过的办法和需要回答的问题。
 
-### 默认行为
+### 使用方法
 
-直接调用 `$reasoning-bridge` 并描述一个具体问题，插件会：
+调用 `$reasoning-bridge`，然后直接描述问题：
 
-1. 找到或恢复这个问题对应的桥接任务；
-2. 收集当前任务已经确认的事实和限制；
-3. 在本地登录的 ChatGPT 网页会话中发送一次请求；
-4. 把顾问的完整回答和可执行结论交回原任务。
+```text
+$reasoning-bridge
+比较这三个训练方案，重点考虑数据成本、扩展到多机训练的难度，以及两周内能否完成。使用 xhigh。
+```
 
-如果只想检查请求内容而不发送，明确说“只预览”或 `preview`。
+Reasoning Bridge 会收集当前任务中的必要信息，在已登录的 ChatGPT 网页会话中提问，并把回答带回当前任务。
 
-### 可选配置
+### 配置
 
 #### `reasoning_level`
 
-网页端推理档位。可用值取决于当前 ChatGPT 网页界面，例如 `pro`、`high` 或 `xhigh`。一次只能选一个。
+选择 ChatGPT 网页端使用的推理档位。
 
-- 指定 `pro`：网页端切换到 Pro 模式；
-- 指定 `xhigh`：网页端使用 xhigh 档位；
-- 不指定：保留当前网页会话已经显示的档位；
-- 指定档位不可用：停止发送并报告，不自动降级。
+| 值 | 效果 |
+| --- | --- |
+| `pro` | 使用 Pro 模式 |
+| `high` | 使用 high 档位 |
+| `xhigh` | 使用 xhigh 档位 |
+| 不指定 | 保留当前网页会话已选择的档位 |
+
+一次只能选择一个档位。如果指定的档位在当前网页中不可用，请求不会发送。
 
 #### `preview`
 
-只生成请求，不联系网页顾问，也不改变执行任务。
-
-#### 执行环境
-
-可以在请求中说明要让哪个执行任务继续。桥接器会把回答交回发起问题的任务；它不会把网页登录信息复制到执行环境。
-
-### 示例
+只生成准备发送的请求，不打开新的顾问对话，也不发送消息。
 
 ```text
 $reasoning-bridge
-帮我比较这个训练方案的三种架构，重点看数据成本、可扩展性和两周内能否完成。用网页端 xhigh，结论交回当前任务。
+只预览。判断这次依赖升级是否值得做，使用 high，不要发送。
 ```
+
+### 更多示例
+
+使用 Pro 做一次外部调研：
 
 ```text
 $reasoning-bridge
-只预览。请判断这个依赖升级是否值得做，网页端使用 high，不要发送。
+用 Pro 调研目前可用的开源实现，比较许可证、维护状态和迁移成本，然后给出建议。
 ```
+
+重新判断一个困难问题：
 
 ```text
 $reasoning-bridge
-这个 bug 已经尝试过三种修复仍然没有解释清楚。请用网页端 Pro 重新审视问题的整体方向，然后把建议交回原任务。
+这个 bug 已经尝试过三种修复，但现象仍然解释不通。用 xhigh 检查我们是不是从一开始就采用了错误的假设。
 ```
 
-### 适合与不适合
+继续之前的讨论：
 
-适合：外部调研、架构选择、长期规划、重要前提的复核，以及普通调试无法解决的方向性问题。
-
-不适合：简单改名、常规代码实现、已有明确答案的局部修复。此时直接让 Codex 执行更快。
+```text
+$reasoning-bridge
+把刚得到的新实验结果补充给之前的顾问，再判断原方案是否还成立。
+```
 
 ## English
 
-Reasoning Bridge connects an active Codex task to a ChatGPT web advisor when the problem needs research, architectural comparison, or a broader direction decision. It brings the complete answer back to the task that asked the question.
+Reasoning Bridge lets Codex ask a ChatGPT web chat to research or assess a development problem, then continue working with the answer.
 
-Codex remains responsible for reading and changing code, debugging, and validation. The web advisor handles questions that benefit from wider information or a second look at the overall direction. The request is written as a normal engineering brief with context, evidence, previous attempts, and specific questions.
+It is useful for architecture choices, comparing approaches, external research, long-term planning, and difficult problems that ordinary debugging has not explained. The request includes the project background, available evidence, previous attempts, and the questions that need an answer.
 
-### Default behavior
+### Usage
 
-Invoke `$reasoning-bridge` with a concrete question. The plugin finds or resumes the bridge task, gathers the relevant facts, sends one request in the signed-in ChatGPT web session, and returns the complete answer and actionable constraints to the original task.
+Invoke `$reasoning-bridge` and describe the problem:
 
-Say “preview only” or `preview` when you want to inspect the request without sending it.
+```text
+$reasoning-bridge
+Compare these three training plans. Focus on data cost, the difficulty of scaling to multiple machines, and what can be completed in two weeks. Use xhigh.
+```
 
-### Options
+Reasoning Bridge gathers the necessary context from the current task, asks the question in the signed-in ChatGPT web session, and brings the answer back.
+
+### Configuration
 
 #### `reasoning_level`
 
-The reasoning level used by the web chat. Available values depend on the current ChatGPT UI, for example `pro`, `high`, or `xhigh`. Choose one value per request.
+Select the reasoning level used in the ChatGPT web chat.
 
-- `pro`: use Pro mode in the web chat;
-- `xhigh`: use the xhigh level in the web chat;
-- omitted: keep the level currently shown in that chat;
-- unavailable: stop and report it instead of silently downgrading.
+| Value | Effect |
+| --- | --- |
+| `pro` | Use Pro mode |
+| `high` | Use the high level |
+| `xhigh` | Use the xhigh level |
+| Omitted | Keep the level currently selected in the web chat |
+
+Choose one level per request. If the requested level is unavailable in the current web UI, the request is not sent.
 
 #### `preview`
 
-Draft the request without contacting the web advisor or changing the execution task.
-
-#### Execution target
-
-You may say which execution task should continue. The bridge returns the answer to the task that raised the question and never copies browser credentials into the execution environment.
-
-### Examples
+Prepare the request without opening a new advisor conversation or sending a message.
 
 ```text
 $reasoning-bridge
-Compare the three architectures for this training plan, focusing on data cost, scalability, and what we can finish in two weeks. Use xhigh in the web chat and return the decision to the current task.
+Preview only. Decide whether this dependency upgrade is worth doing. Use high and do not send the request.
 ```
+
+### More examples
+
+Research available implementations with Pro:
 
 ```text
 $reasoning-bridge
-Preview only. Assess whether this dependency upgrade is worth doing. Use high, but do not send the request.
+Use Pro to research the available open-source implementations. Compare their licenses, maintenance status, and migration cost, then recommend one.
 ```
+
+Reconsider a difficult problem:
 
 ```text
 $reasoning-bridge
-Three attempted fixes have not explained this bug. Use Pro mode to reconsider the overall direction, then return the recommendation to the original task.
+We have tried three fixes for this bug, but the behavior still does not make sense. Use xhigh to check whether our original assumption was wrong.
 ```
 
-### Good fit
+Continue an earlier discussion:
 
-Use it for external research, architecture decisions, long-term planning, premise checks, and unusually difficult direction problems.
-
-For routine implementation, straightforward debugging, or a small local edit, ask Codex directly.
+```text
+$reasoning-bridge
+Add the new experiment results to the previous advisor conversation and decide whether the original plan still holds.
+```
 
 ## Installation
 
-Install this repository as a Codex plugin, or copy `skills/reasoning-bridge` to `~/.codex/skills/` to use the self-contained skill directly.
+Install this repository as a Codex plugin, or copy `skills/reasoning-bridge` to `~/.codex/skills/`.
