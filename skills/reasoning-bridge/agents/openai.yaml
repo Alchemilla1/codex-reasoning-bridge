@@ -1,0 +1,4 @@
+interface:
+  display_name: "Reasoning Bridge"
+  short_description: "Bridge remote work to a high-reasoning web chat"
+  default_prompt: "Use $reasoning-bridge with the requested ChatGPT web reasoning level, then return the decision to the active execution task."

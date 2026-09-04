@@ -1,0 +1,22 @@
+{
+  "name": "reasoning-bridge",
+  "version": "0.1.0+codex.20260904162632",
+  "description": "Bridge remote coding work to a selected ChatGPT web reasoning level.",
+  "author": {
+    "name": "Reasoning Bridge contributors"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Reasoning Bridge",
+    "shortDescription": "Bridge remote work to a high-reasoning web chat.",
+    "longDescription": "Collect repository evidence, challenge inherited premises, draft a natural engineering brief, and send it to a selected ChatGPT web reasoning level.",
+    "developerName": "Reasoning Bridge contributors",
+    "category": "Productivity",
+    "capabilities": [
+      "Decision context collection",
+      "Human-readable advisor request drafting",
+      "Local and selected SSH host routing"
+    ],
+    "defaultPrompt": "Use $reasoning-bridge with the requested ChatGPT web reasoning level, then return the decision to the active execution task."
+  }
+}
