@@ -98,7 +98,7 @@ Never send a remote path directly to a browser file chooser.
    reread the remote thread or rebuild the briefing on every check. Stay silent
    while the response is incomplete. When complete, save the response verbatim
    to `response.md`, write `execution-brief.md`, continue with return routing,
-   then pause the heartbeat.
+   then delete the heartbeat.
 10. Verify the original remote thread identity again. Use the local Codex app
     tool `send_message_to_thread` to send the complete response and execution
     brief to that remote task. This is the only return-routing action.
@@ -161,8 +161,9 @@ and search for the exact request before deciding whether it was sent.
 The run is complete only after the full response and execution brief have been
 sent to the verified remote thread. A local answer without remote delivery is
 `returned`, not `delivered`. A waiting heartbeat is temporary run machinery,
-not a permanent coordinator or watcher, and must be paused after delivery or a
-terminal error.
+not a permanent coordinator or watcher, and must be deleted after delivery or
+a terminal error. Record the deletion in `state.json`; do not leave a paused
+automation behind.
 
 ## Boundaries
 
