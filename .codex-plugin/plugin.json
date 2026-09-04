@@ -1,22 +1,22 @@
 {
   "name": "reasoning-bridge",
-  "version": "0.1.0+codex.20260904174801",
-  "description": "Bridge remote coding work to a selected ChatGPT web reasoning level.",
+  "version": "0.1.0+codex.20260904183120",
+  "description": "Run a one-time local ChatGPT web consultation for a remote Codex task.",
   "author": {
     "name": "Reasoning Bridge contributors"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Reasoning Bridge",
-    "shortDescription": "Bridge remote work to a high-reasoning web chat.",
-    "longDescription": "Collect repository evidence, challenge inherited premises, draft a natural engineering brief, and send it to a selected ChatGPT web reasoning level.",
+    "shortDescription": "Advise a remote Codex task through ChatGPT web.",
+    "longDescription": "Read a remote Codex thread, draft a natural engineering brief, ask a signed-in ChatGPT web advisor, and return the answer to that task.",
     "developerName": "Reasoning Bridge contributors",
     "category": "Productivity",
     "capabilities": [
-      "Decision context collection",
+      "Remote task context collection",
       "Human-readable advisor request drafting",
       "Return decisions to the originating execution task"
     ],
-    "defaultPrompt": "Use $reasoning-bridge with the requested ChatGPT web reasoning level, then return the decision to the active execution task."
+    "defaultPrompt": "Use $reasoning-bridge with a remote thread ID, then return the web advisor decision to that remote task."
   }
 }

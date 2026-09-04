@@ -1,6 +1,6 @@
 interface:
   display_name: "Reasoning Bridge"
-  short_description: "Ask a ChatGPT web advisor for a high-level decision"
-  default_prompt: "Use $reasoning-bridge to ask the ChatGPT web advisor for a researched direction, then return the answer to the active task."
+  short_description: "Advise a remote Codex task through ChatGPT web"
+  default_prompt: "Use $reasoning-bridge with a remote thread ID to read that task, ask the ChatGPT web advisor, and return the answer to the same remote task."
 policy:
   allow_implicit_invocation: false

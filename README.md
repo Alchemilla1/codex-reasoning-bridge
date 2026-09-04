@@ -2,64 +2,57 @@
 
 [中文说明](README.zh-CN.md)
 
-Reasoning Bridge lets Codex ask a signed-in ChatGPT web chat to research or assess a development problem, then return the answer to the task doing the work.
+Reasoning Bridge is a local Codex skill for asking a signed-in ChatGPT web chat
+to research or make a high-level decision for a remote Codex task.
 
-It is intended for architecture choices, external research, comparing approaches, long-term planning, and difficult problems whose direction remains unclear after ordinary investigation. The active Codex task still reads the repository, writes code, debugs, and validates the result.
+The remote task continues to own the repository, commands, experiments, and
+implementation. The local bridge reads that task, writes the advisor briefing,
+uses the local Chrome/Edge extension, and sends the result back. No permanent
+coordinator task or background watcher is required.
 
-## Requirements
+## Use it
 
-The local coordinator uses a browser-control extension:
-
-1. Install and enable the Chrome or Edge browser extension.
-2. Sign in to ChatGPT with the ordinary browser profile used by the extension.
-3. Allow the extension to access local file URLs when uploading code.
-4. The built-in `@Browser` surface may view web pages but cannot automate local file uploads.
-
-If uploads are unavailable, text-only requests can use `code_context=none`. A request with attachments stops before upload and reports the missing capability.
-
-## Usage
-
-Invoke `$reasoning-bridge` and describe the decision:
+Invoke the skill in a local Codex task and provide the unique remote thread ID:
 
 ```text
 $reasoning-bridge
-Compare these three training plans. Focus on data cost, multi-machine scaling, and what can be completed in two weeks. Use xhigh.
+remote_thread_id: <remote-thread-id>
+Reassess the architecture direction. Use xhigh and attach only relevant code if needed.
 ```
 
-The bridge gathers facts, writes a natural engineering brief, asks the signed-in web advisor, and returns the full answer plus an execution brief to the originating task.
+The bridge reads the remote thread itself. If current facts are missing, it
+sends one focused request for facts, then reads the reply before writing the
+briefing. After the web answer is complete, it sends the full response and a
+short execution brief back to the same remote thread.
 
 ## Options
 
-### `reasoning_level`
+`reasoning_level` selects the ChatGPT web control: `instant`, `medium`, `high`,
+`xhigh`, or `pro`.
 
-Choose one level available in the ChatGPT web interface: `instant`, `medium`,
-`high`, `xhigh`, or `pro`. These correspond to the five positions shown by the
-web reasoning control; labels may be localized. If omitted, keep the level
-selected in the current web chat. An unavailable requested level stops the run
-rather than being replaced.
+`code_context` controls optional uploads:
 
-### `prepare`
+- `none` (default): no files;
+- `files`: a small explicit set of relevant files;
+- `bundle`: a sanitized archive of selected remote code.
 
-Summarize progress and produce the complete advisor request without sending it.
+These options affect only the web advisor. They do not change the remote Codex
+task's model or reasoning settings.
+
+## Browser requirements
+
+Use a signed-in ordinary Chrome or Edge profile with the Codex browser extension
+enabled. Allow local file URLs when uploading code. The built-in `@Browser`
+surface cannot automate local file selection.
+
+## Local run state
+
+Recoverable files are kept outside the repository at:
 
 ```text
-$reasoning-bridge
-Prepare the request only. Decide whether this dependency upgrade is worth doing based on the evidence gathered so far. Use high and do not send it.
+$CODEX_HOME/reasoning-bridge/sessions/<remote-thread-id>/
 ```
 
-### `code_context`
-
-`none` (default) sends no files; `files` uploads a small explicit set; `bundle` builds and uploads a sanitized archive of selected relevant code. Uploads occur only when `files` or `bundle` is explicitly selected.
-
-```text
-$reasoning-bridge
-Use xhigh to assess this cross-module refactor. Set code_context to files and attach the entry point, interface definition, and two relevant implementations.
-```
-
-## Local state
-
-Recoverable state lives under `$CODEX_HOME/reasoning-bridge/sessions/`. Each logical request has a directory combining project, topic, and originating task ID; request, response, execution brief, and revisioned attachments stay outside the repository.
-
-## Installation
-
-For local skill use, copy `skills/reasoning-bridge` to `~/.codex/skills/reasoning-bridge`. A packaged installation can be added through a configured Codex marketplace.
+The directory contains the request, response, execution brief, state, and any
+revisioned attachments. It is temporary run state, not a persistent bridge
+session.
