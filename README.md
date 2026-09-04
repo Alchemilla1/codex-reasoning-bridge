@@ -34,13 +34,30 @@ Reasoning Bridge 会收集当前任务中的必要信息，在已登录的 ChatG
 
 一次只能选择一个档位。如果指定的档位在当前网页中不可用，请求不会发送。
 
-#### `preview`
+#### `prepare`
 
-只生成准备发送的请求，不打开新的顾问对话，也不发送消息。
+总结当前进度，并生成一份此刻可以发送给顾问的完整请求；不发送消息。
 
 ```text
 $reasoning-bridge
-只预览。判断这次依赖升级是否值得做，使用 high，不要发送。
+总结到目前为止的进度，只准备请求。判断这次依赖升级是否值得做，使用 high，不要发送。
+```
+
+#### `code_context`
+
+控制是否把代码作为附件发给网页顾问。
+
+| 值 | 效果 |
+| --- | --- |
+| `none` | 默认。不上传文件，只在请求中引用必要的短代码片段 |
+| `files` | 上传少量关键源码或配置文件 |
+| `bundle` | 生成并上传一个只包含相关代码的干净最小包 |
+
+只有明确选择 `files` 或 `bundle` 时才会上传代码。附件不会包含凭据、环境文件、个人信息、数据集、日志、缓存、构建产物、模型权重或无关代码。
+
+```text
+$reasoning-bridge
+用 xhigh 判断这次跨模块重构是否合理。code_context 使用 files，附上入口文件、接口定义和两个相关实现。
 ```
 
 ### 更多示例
@@ -98,13 +115,30 @@ Select the reasoning level used in the ChatGPT web chat.
 
 Choose one level per request. If the requested level is unavailable in the current web UI, the request is not sent.
 
-#### `preview`
+#### `prepare`
 
-Prepare the request without opening a new advisor conversation or sending a message.
+Summarize the progress so far and prepare the complete request that could be sent to the advisor; do not send it.
 
 ```text
 $reasoning-bridge
-Preview only. Decide whether this dependency upgrade is worth doing. Use high and do not send the request.
+Summarize the progress so far and prepare the request only. Decide whether this dependency upgrade is worth doing. Use high and do not send it.
+```
+
+#### `code_context`
+
+Control whether code is uploaded as context for the web advisor.
+
+| Value | Effect |
+| --- | --- |
+| `none` | Default. Upload no files and quote only necessary short excerpts |
+| `files` | Upload a small set of key source or configuration files |
+| `bundle` | Build and upload a sanitized minimal package containing only relevant code |
+
+Code is uploaded only when `files` or `bundle` is explicitly selected. Attachments exclude credentials, environment files, personal information, datasets, logs, caches, build outputs, model weights, and unrelated code.
+
+```text
+$reasoning-bridge
+Use xhigh to assess this cross-module refactor. Set code_context to files and attach the entry point, interface definition, and the two relevant implementations.
 ```
 
 ### More examples
